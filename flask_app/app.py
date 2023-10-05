@@ -8,10 +8,10 @@ s3_client = boto3.client('s3', region_name='your-region')
 
 @app.route('/')
 def index():
-    connection = pymysql.connect(host='your-rds-endpoint',
-                                 user='your-username',
-                                 password='your-password',
-                                 database='your-database')
+    connection = pymysql.connect(host='database1.c1pwkpkemkor.eu-north-1.rds.amazonaws.com',
+                                 user='root',
+                                 password='11111111',
+                                 database='database1')
 
     with connection.cursor() as cursor:
         cursor.execute("SELECT filename, word_count FROM files")
@@ -29,10 +29,11 @@ def upload_file():
     file = request.files['file']
     s3_client.put_object(Bucket='your-s3-bucket', Key=file.filename, Body=file.read())
     # Saving metadata (without word count, which will be updated by the Lambda function) to RDS
-    connection = pymysql.connect(host='your-rds-endpoint',
-                                 user='your-username',
-                                 password='your-password',
-                                 database='your-database')
+    connection = pymysql.connect(host='database1.c1pwkpkemkor.eu-north-1.rds.amazonaws.com',
+                                 user='root',
+                                 password='11111111',
+                                 database='database1')
+
     with connection.cursor() as cursor:
         sql = "INSERT INTO files (filename, word_count) VALUES (%s, 0)"
         cursor.execute(sql, (file.filename,))

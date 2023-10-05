@@ -11,10 +11,11 @@ def lambda_handler(event, context):
     word_count = len(file_content.split())
 
     # Store the word count in RDS
-    connection = pymysql.connect(host='your-rds-endpoint',
-                                 user='your-username',
-                                 password='your-password',
-                                 database='your-database')
+    connection = pymysql.connect(host='database1.c1pwkpkemkor.eu-north-1.rds.amazonaws.com',
+                                 user='root',
+                                 password='11111111',
+                                 database='database1')
+
     with connection.cursor() as cursor:
         sql = "UPDATE files SET word_count=%s WHERE filename=%s"
         cursor.execute(sql, (word_count, s3_key))
